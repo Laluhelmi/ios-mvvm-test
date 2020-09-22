@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-Mvvm-MvvmUITests/Pods-Mvvm-MvvmUITests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/Fuse/Fuse.framework
+${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework
