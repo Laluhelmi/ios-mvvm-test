@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
        let nav1 = UINavigationController()
         
         if UserDefaults.standard.bool(forKey: Constant.IS_LOGGED_IN) == false {
-            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVc") as! ViewController
+            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVc") as! LoginViewController
             nav1.viewControllers = [loginVC]
             self.window!.rootViewController = nav1
         } else {

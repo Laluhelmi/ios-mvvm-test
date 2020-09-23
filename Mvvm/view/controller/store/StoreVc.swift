@@ -10,6 +10,7 @@ import UIKit
 
 class StoreVc: BaseViewController ,UITableViewDataSource,UITableViewDelegate{
  
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
     var finish      : ((String?,String?) -> ())?
     
@@ -33,10 +34,13 @@ class StoreVc: BaseViewController ,UITableViewDataSource,UITableViewDelegate{
     }
     
     func fetchStores(){
+        self.loadingIndicator.startAnimating()
         viewModel.fetchStores()
         viewModel.didFinishFetch = {
             stores in
             if let stores = stores{
+                self.loadingIndicator.stopAnimating()
+                self.loadingIndicator.isHidden = true
                 self.stores = stores
                 self.tableView.reloadData()
             }
@@ -44,6 +48,8 @@ class StoreVc: BaseViewController ,UITableViewDataSource,UITableViewDelegate{
         
         viewModel.didError = {
             error in
+            self.loadingIndicator.stopAnimating()
+                           self.loadingIndicator.isHidden = true
             self.showMessage(title: "Fail", message: error!.localizedDescription)
         }
         

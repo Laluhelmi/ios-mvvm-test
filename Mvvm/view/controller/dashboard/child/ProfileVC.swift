@@ -17,7 +17,7 @@ class ProfileVC: BaseViewController {
     
     
     //inject viewmodel
-    let viewModel = DashboardViewModel(service: ProfileService())
+    let viewModel = ProfileViewModel(service: DashBoardService())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,9 +49,9 @@ class ProfileVC: BaseViewController {
             
             
             let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVc") as! ViewController
+            let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginVc") as! LoginViewController
             self.navigationController?.pushViewController(loginVC, animated: true)
-            //remove prevous controller
+            //remove previous controller
             self.navigationController?.viewControllers.remove(at: 0)
         })
     }
@@ -65,7 +65,7 @@ class ProfileVC: BaseViewController {
          roundedView.layer.borderWidth = 0.0
          //profile container
          profileContainer.layer.cornerRadius = 5.0
-        // profileContainer.addShadow(color: UIColor.black, offSet: CGSize(width: -1, height: 1))
+         profileContainer.addShadow()
     }
     
  

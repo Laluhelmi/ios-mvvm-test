@@ -9,6 +9,7 @@
 import Foundation
 
 class MaterialRaw: Decodable {
+    var id   : Int?
     var uuid : String?
     var sku: String?
     var unit : String?
@@ -16,4 +17,6 @@ class MaterialRaw: Decodable {
     var nameChin: String?
     var defaultPrice: Double?
     var packing: String?
+    
+    var stores : [Store]?
 }

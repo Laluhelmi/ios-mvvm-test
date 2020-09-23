@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ViewController: BaseViewController{
+class LoginViewController: BaseViewController{
 
     
     @IBOutlet weak var username: UITextField!
@@ -76,8 +76,8 @@ class ViewController: BaseViewController{
         username.delegate = self
         password.delegate = self
         
-        username.addTarget(self, action: #selector(ViewController.textFieldChange(_:)), for: .editingChanged)
-        password.addTarget(self, action: #selector(ViewController.textFieldChange(_:)), for: .editingChanged)
+        username.addTarget(self, action: #selector(LoginViewController.textFieldChange(_:)), for: .editingChanged)
+        password.addTarget(self, action: #selector(LoginViewController.textFieldChange(_:)), for: .editingChanged)
         
 //        self.username.dropShadow(color: UIColor.blue, offSet: CGSize(width: 1, height: 1))    
     }
@@ -96,7 +96,7 @@ class ViewController: BaseViewController{
     
 }
 
-extension ViewController: UITextFieldDelegate{
+extension LoginViewController: UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         

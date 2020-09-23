@@ -12,32 +12,32 @@ class DashBoardVC: BaseViewController {
     
 
     
-    let viewModel = DashboardViewModel(service: ProfileService())
+    let viewModel = DashboardViewModel(service: DashBoardService())
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchTF: UITextField!
     
-    var materialRaws = [MaterialRaw]()
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.showPopUp()
+        self.setUpView()
+    }
+    
+    func setUpView(){
+        searchTF.addTarget(self, action: #selector(DashBoardVC.textFieldChange(_:)), for: .editingChanged)
         self.setUpTableView()
     }
     
     func fetchMaterialRaws(storeId: String){
         self.loadingIndicator.startAnimating()
-        viewModel.fetchRawMaterial(storeId: storeId)
+        viewModel.storeUUID = storeId
+        viewModel.fetchRawMaterial()
         viewModel.didFinishFetch = {
-            if let materialRaws = self.viewModel.materialRaws{
-                self.loadingIndicator.stopAnimating()
-                self.loadingIndicator.isHidden = true
-                self.materialRaws.append(contentsOf: materialRaws)
-                //append empty data to provide loading view
-                self.materialRaws.append(MaterialRaw())
-                self.tableView.reloadData()
-            }
+            self.loadingIndicator.stopAnimating()
+            self.loadingIndicator.isHidden = true
+            self.tableView.reloadData()
         }
         viewModel.didError = {
             error in
@@ -45,6 +45,26 @@ class DashBoardVC: BaseViewController {
             self.loadingIndicator.isHidden = true
             self.showMessage(title: "Error", message: error?.localizedDescription)
         }
+        
+        viewModel.didFilter = {
+            //scroll to position when search is finish
+            self.tableView.reloadData()
+        }
+        viewModel.didSwitch = {
+            isFiltered in
+            if isFiltered{
+                self.viewModel.scrollPosition = self.tableView.contentOffset
+            }
+            else {
+                if let position = self.viewModel.scrollPosition{
+                    self.tableView.setContentOffset(position, animated: false)
+                }
+            }
+        }
+    }
+    
+    @objc func textFieldChange(_ textField: UITextField) {
+        viewModel.searchKey = textField.text
     }
     
     func setUpTableView(){
@@ -82,27 +102,23 @@ class DashBoardVC: BaseViewController {
 extension DashBoardVC : UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.materialRaws.count
+        viewModel.isFilterActive == false ? self.viewModel.materialRaws.count : viewModel.filteredData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //check if last row visible
-        if indexPath.row == self.materialRaws.count - 1{
+        if indexPath.row == viewModel.materialRaws.count - 1 && viewModel.currentPage < viewModel.lastPage && !viewModel.isFilterActive{
             let cell = tableView.dequeueReusableCell(withIdentifier: "loading-cell", for: indexPath) as! LoadingCell
             cell.selectionStyle = .none
             cell.loadingIndicator.startAnimating()
-              DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                self.materialRaws.removeLast()
-                self.materialRaws.append(contentsOf: self.materialRaws)
-                self.tableView.reloadData()
-              })
+            //request for next page
+            self.viewModel.fetchRawMaterial()
             
             return cell
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "material-raw-cell", for: indexPath) as! MaterialRawCell
-            cell.selectionStyle = .none
-            let data = self.materialRaws[indexPath.row]
+            let data = viewModel.isFilterActive == false ? viewModel.materialRaws[indexPath.row] : viewModel.filteredData[indexPath.row]
             cell.sku.text = data.sku
             if let price = data.defaultPrice{
                 cell.price.text = String(price)
@@ -113,5 +129,16 @@ extension DashBoardVC : UITableViewDelegate,UITableViewDataSource{
         }
     }
     
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.isSelected = false
+        let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "MaterialRawDetail") as! MaterialRawDetailVC
+       
+        let materialRaw = viewModel.isFilterActive == false ? self.viewModel.materialRaws[indexPath.row] : viewModel.filteredData[indexPath.row]
+        controller.uuId        = materialRaw.uuid
+        self.present(controller, animated: true, completion: nil)
+        
+              
+    }
     
 }

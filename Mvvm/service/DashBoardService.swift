@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ProfileService :BaseService{
+class DashBoardService :BaseService{
 
     
     func fetchProfile(completion : @escaping (ProfileResponse?, Error?) -> ()){
@@ -21,10 +21,15 @@ class ProfileService :BaseService{
         storeId: String,
         page   : Int = 1,
         completion : @escaping (MaterialRawResponse?, Error?) -> ()){
-       
-        //    let pageString = String(pa)
         
-        let endPoint = "raw-materials?storeId="+storeId+"&page="
+        let pageString = String(page)
+        let endPoint = "raw-materials?storeId="+storeId+"&page="+pageString
+        Network().request(endPoint: endPoint, parameters: nil, method: .get, header: self.header, completion: completion)
+    }
+    
+    func materialRawDetail(id: String,completion : @escaping (MaterialRawDetail?, Error?) -> ()){
+        
+        let endPoint = "raw-materials/"+id
         Network().request(endPoint: endPoint, parameters: nil, method: .get, header: self.header, completion: completion)
     }
     
@@ -34,10 +39,17 @@ class ProfileResponse: Decodable {
     var data: Profile?
 }
 
-class MaterialRawResponse: Decodable{
-    var data: [MaterialRaw]?
+class MaterialRawDetail: Decodable {
+    var data : MaterialRaw?
 }
 
-class Link: Decodable{
-    
+class MaterialRawResponse: Decodable{
+    var data: [MaterialRaw]?
+    var meta: Meta?
+}
+
+class Meta: Decodable{
+    var first : Int?
+    var current_page : Int?
+    var last_page  : Int?
 }
