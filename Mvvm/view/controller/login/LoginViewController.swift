@@ -18,7 +18,6 @@ class LoginViewController: BaseViewController{
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     
-//    var viewModel = DataViewModel(service: DataService())
     var viewModel = LoginViewModel(service: LoginService())
         
     override func viewDidLoad() {
@@ -37,10 +36,12 @@ class LoginViewController: BaseViewController{
 
     func attempLogin(){
         self.loadingIndicator.isHidden = false
+        self.loadingIndicator.startAnimating()
         viewModel.login(username: self.username.text!, password: self.password.text!)
         viewModel.didFinishFetch = {
             accesToken in
             self.loadingIndicator.isHidden = true
+            self.loadingIndicator.stopAnimating()
             
             //save acces token
             UserDefaults.standard.set(accesToken, forKey: Constant.API_TOKEN)
@@ -79,7 +80,7 @@ class LoginViewController: BaseViewController{
         username.addTarget(self, action: #selector(LoginViewController.textFieldChange(_:)), for: .editingChanged)
         password.addTarget(self, action: #selector(LoginViewController.textFieldChange(_:)), for: .editingChanged)
         
-//        self.username.dropShadow(color: UIColor.blue, offSet: CGSize(width: 1, height: 1))    
+
     }
     
     @objc func textFieldChange(_ textField: UITextField) {

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,13 +29,21 @@
                                     <constraint firstAttribute="width" constant="150" id="t2g-zU-4Az"/>
                                 </constraints>
                             </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please Wait ...." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1M-nO-Kdp">
+                                <rect key="frame" x="165.5" y="530.5" width="83.5" height="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="m1M-nO-Kdp" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="0Tm-Ba-iAj"/>
                             <constraint firstItem="fpg-HF-MJv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="3h8-0t-A00"/>
                             <constraint firstItem="31w-Ie-ElC" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="9fu-1u-zWr"/>
                             <constraint firstItem="fpg-HF-MJv" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="StE-a9-W4r"/>
                             <constraint firstItem="31w-Ie-ElC" firstAttribute="top" secondItem="fpg-HF-MJv" secondAttribute="bottom" constant="50" id="TaP-Jt-wOp"/>
+                            <constraint firstItem="m1M-nO-Kdp" firstAttribute="top" secondItem="31w-Ie-ElC" secondAttribute="bottom" constant="20" id="Wh4-RE-xNm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
