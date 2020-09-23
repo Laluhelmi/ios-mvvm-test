@@ -102,12 +102,12 @@ class DashBoardVC: BaseViewController {
 extension DashBoardVC : UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.isFilterActive == false ? self.viewModel.materialRaws.count : viewModel.filteredData.count
+        viewModel.tableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //check if last row visible
-        if indexPath.row == viewModel.materialRaws.count - 1 && viewModel.currentPage < viewModel.lastPage && !viewModel.isFilterActive{
+        if indexPath.row == viewModel.materialRaws.count - 1 && viewModel.isLoadMoreEnable{
             let cell = tableView.dequeueReusableCell(withIdentifier: "loading-cell", for: indexPath) as! LoadingCell
             cell.selectionStyle = .none
             cell.loadingIndicator.startAnimating()

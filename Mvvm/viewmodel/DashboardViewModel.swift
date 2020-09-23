@@ -30,6 +30,14 @@ class DashboardViewModel: BaseViewModel {
     //is tableview switched from originial to filtered data
     var isSwitch : Bool = false
     var didSwitch : ((Bool) -> ())?
+    
+    var isLoadMoreEnable : Bool{
+        return self.currentPage < self.lastPage && !self.isFilterActive
+    }
+    var tableViewDataSource : Int{
+        return self.isFilterActive == false ? self.materialRaws.count : self.filteredData.count
+    }
+    
     var isFilterActive :Bool = false{
         didSet{
             if self.isFilterActive{
