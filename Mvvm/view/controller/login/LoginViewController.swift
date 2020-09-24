@@ -42,12 +42,7 @@ class LoginViewController: BaseViewController{
             accesToken in
             self.loadingIndicator.isHidden = true
             self.loadingIndicator.stopAnimating()
-            
-            //save acces token
-            UserDefaults.standard.set(accesToken, forKey: Constant.API_TOKEN)
-            //set login state
-            UserDefaults.standard.set(true, forKey: Constant.IS_LOGGED_IN)
-            
+            self.saveLoginState(accesToken: accesToken)
             //push to dashboard
             let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DashboardTabVC") as! DashboardTabVC
             self.navigationController?.pushViewController(controller, animated: true)
@@ -56,8 +51,16 @@ class LoginViewController: BaseViewController{
         viewModel.didError = {
             error in
             self.loadingIndicator.isHidden = true
+            self.loadingIndicator.stopAnimating()
             self.showMessage(title: "Error", message: error!.localizedDescription)
         }
+    }
+    
+    func saveLoginState(accesToken: String?){
+        //save acces token
+        UserDefaults.standard.set(accesToken, forKey: Constant.API_TOKEN)
+        //set login state
+        UserDefaults.standard.set(true, forKey: Constant.IS_LOGGED_IN)
     }
     
     func setUpViews(){
@@ -73,27 +76,22 @@ class LoginViewController: BaseViewController{
     }
     
     func setUpTextField(){
-        
         username.delegate = self
         password.delegate = self
         
         username.addTarget(self, action: #selector(LoginViewController.textFieldChange(_:)), for: .editingChanged)
         password.addTarget(self, action: #selector(LoginViewController.textFieldChange(_:)), for: .editingChanged)
-        
+        viewModel.onTextFieldType = {
+            self.loginButton.isEnabled = self.viewModel.isButtonEnabled
+            self.loginButton.alpha     = self.viewModel.buttonAlpa
+        }
 
     }
     
     @objc func textFieldChange(_ textField: UITextField) {
-        if username.text != "" && password.text != ""{
-            loginButton.isEnabled = true
-            loginButton.alpha     = 1.0
-        }
-        else {
-            loginButton.isEnabled = false
-            loginButton.alpha     = 0.3
-        }
+        viewModel.username  = username.text
+        viewModel.password  = password.text
     }
-    
     
 }
 

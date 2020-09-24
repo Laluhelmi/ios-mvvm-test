@@ -13,6 +13,26 @@ class LoginViewModel {
     
     private var service: LoginService?
     
+    
+    var username: String?{
+        didSet{
+            self.onTextFieldType?()
+        }
+    }
+    var password: String?{
+        didSet{
+            self.onTextFieldType?()
+        }
+    }
+    
+    var isButtonEnabled: Bool{
+         return (self.username != "" && self.password != "")
+    }
+    
+    var buttonAlpa :CGFloat{
+        return isButtonEnabled == true ? 1.0 : 0.3
+    }
+    
     private var error : Error?{
         didSet{
             self.didError?(self.error)
@@ -26,6 +46,7 @@ class LoginViewModel {
     
     var didFinishFetch: ((String?) -> ())?
     var didError      : ((Error?) -> ())?
+    var onTextFieldType : (() -> ())?
     
     init(service: LoginService) {
         self.service = service
